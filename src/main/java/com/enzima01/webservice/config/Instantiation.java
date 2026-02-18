@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import com.enzima01.webservice.domain.Post;
 import com.enzima01.webservice.domain.User;
 import com.enzima01.webservice.dto.AuthorDTO;
+import com.enzima01.webservice.dto.CommentDTO;
 import com.enzima01.webservice.repositories.PostRepository;
 import com.enzima01.webservice.repositories.UserRepository;
 
@@ -38,18 +39,27 @@ public class Instantiation implements CommandLineRunner {
 
 		userRepository.saveAll(Arrays.asList(u1, u2, u3));
 
-		Post post1 = new Post(null, sdf.parse("01/01/2026"), "Partiu viagem", "Vou viajar para São Paulo. Abraços!", new AuthorDTO(u2));
+		Post post1 = new Post(null, sdf.parse("01/01/2026"), "Partiu viagem", "Vou viajar para São Paulo. Abraços!",
+				new AuthorDTO(u2));
 		Post post2 = new Post(null, sdf.parse("18/02/2026"), "Bom dia", "Acordei feliz hoje!", new AuthorDTO(u1));
 
+		// post 1
+		CommentDTO c1 = new CommentDTO("Boa viagem!", sdf.parse("03/01/2026"), new AuthorDTO(u1));
+
+		// post 2
+		CommentDTO c2 = new CommentDTO("Aproveite seu dia!", sdf.parse("18/02/2026"), new AuthorDTO(u3));
+		CommentDTO c3 = new CommentDTO("Tenha um ótimo dia!", sdf.parse("18/02/2026"), new AuthorDTO(u2));
+
+		post1.getComments().addAll(Arrays.asList(c1));
+		post2.getComments().addAll(Arrays.asList(c2, c3));
+
 		postRepository.saveAll(Arrays.asList(post1, post2));
-		
-		
+
 		u2.getPost().addAll(Arrays.asList(post1));
 		u1.getPost().addAll(Arrays.asList(post2));
-		
+
 		userRepository.saveAll(Arrays.asList(u1, u2));
-		
-		
+
 	}
 
 }
